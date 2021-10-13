@@ -3,40 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Card : MonoBehaviour 
+public class Card : MonoBehaviour
 {
     [SerializeField] private string cardName = "";
     [SerializeField] GameObject hiddenFace;
     [SerializeField] GameObject visibleFace;
-    [SerializeField] float durationOfDisplay = 1.5f;
 
-    private bool isDisplayed = false;
+    public void SetSprite(Sprite sprite) {
+        visibleFace.GetComponent<Image>().sprite = sprite;
+        cardName = sprite.name;
+    }
 
-    public string GetName() {
+    public string GetName()
+    {
         return cardName;
     }
 
-    public void SeeCard() {
-        if (!isDisplayed) {
-            StartCoroutine(DisplayCard());    
-        }
-    }
-
-    IEnumerator DisplayCard() {
-        ToggleDisplay(true);
-        yield return new WaitForSeconds(durationOfDisplay);
-        ToggleDisplay(false);
-    }
-
-    private void ToggleDisplay(bool display) {
-        visibleFace.GetComponent<Image>().enabled = display;
-        isDisplayed = display;
-
-        if (display) {
+    public void SeeCard()
+    {
+        if (GameManager.instance.CanDisplayCard())
+        {
             GameManager.instance.AddCardDisplayed(this);
-            GameManager.instance.CheckIdenticalCards();
-        } else {
-            GameManager.instance.RemoveCardDisplayed(this);
+            ToggleDisplay(true);
         }
+    }
+
+    public void ToggleDisplay(bool display)
+    {
+        visibleFace.GetComponent<Image>().enabled = display;
+    }
+
+    public void Deactivate()
+    {
+        visibleFace.SetActive(false);
+        hiddenFace.SetActive(false);
     }
 }

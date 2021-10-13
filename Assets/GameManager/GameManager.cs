@@ -5,10 +5,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    private List<Card> cardsDisplayed = new List<Card>();
+    private BoardManager boardManager;
+    private int nbOfPairsFound = 0;
 
-    private List<Card> cardsCurrentlyDisplayed = new List<Card>();
-    public List<Card> CardsCurrentlyDisplayed { get { return cardsCurrentlyDisplayed; } }
-
+    #region Singleton
     private void Awake()
     {
         if (instance != null)
@@ -19,38 +20,72 @@ public class GameManager : MonoBehaviour
 
         instance = this;
     }
+    #endregion
+
+    private void Start()
+    {
+        boardManager = FindObjectOfType<BoardManager>();
+    }
 
     public void AddCardDisplayed(Card card)
     {
-        cardsCurrentlyDisplayed.Add(card);
+        cardsDisplayed.Add(card);
+
+        if (cardsDisplayed.Count == 2)
+        {
+            CheckIdenticalCards();
+        }
     }
 
     public void RemoveCardDisplayed(Card card)
     {
-        cardsCurrentlyDisplayed.Remove(card);
+        cardsDisplayed.Remove(card);
+    }
+
+    public bool CanDisplayCard()
+    {
+        return cardsDisplayed.Count < 2;
     }
 
     public void CheckIdenticalCards()
     {
-        if (cardsCurrentlyDisplayed.Count == 2)
+        if (cardsDisplayed[0].GetName() == cardsDisplayed[1].GetName())
         {
-            string firstCardName = cardsCurrentlyDisplayed[0].GetName();
-            string secondCardName = cardsCurrentlyDisplayed[1].GetName();
-
-            if (firstCardName == secondCardName)
-            {
-                Invoke("DeleteCardsFromBoard", 0.5f);
-            }
+            Invoke("DeleteCardsFromBoard", 0.5f);
+            CheckWinState();
+        }
+        else
+        {
+            Invoke("ResetCards", 1f);
         }
     }
 
-    public void DeleteCardsFromBoard()
+    private void DeleteCardsFromBoard()
     {
-        foreach (Card card in cardsCurrentlyDisplayed)
+        foreach (Card card in cardsDisplayed)
         {
-            card.gameObject.SetActive(false);
+            card.Deactivate();
         }
 
-        cardsCurrentlyDisplayed.Clear();
+        cardsDisplayed.Clear();
+    }
+
+    private void ResetCards()
+    {
+        foreach (Card card in cardsDisplayed)
+        {
+            card.ToggleDisplay(false);
+        }
+
+        cardsDisplayed.Clear();
+    }
+
+    private void CheckWinState()
+    {
+        nbOfPairsFound++;
+        if (nbOfPairsFound >= boardManager.NbOfPairs)
+        {
+            Debug.Log("Win !");
+        }
     }
 }

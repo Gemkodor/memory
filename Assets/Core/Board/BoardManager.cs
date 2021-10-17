@@ -24,7 +24,10 @@ public class BoardManager : MonoBehaviour
 
     private void Update()
     {
-        nbOfClicksLbl.GetComponentInChildren<TextMeshProUGUI>().text = "Nombre de clics : " + nbOfClicks.ToString();
+        string label = "Nombre de clics : " + nbOfClicks.ToString();
+        label += "\nNombre de clics minimum pour terminer : " + GameManager.Instance.CurrentLvl * 4;
+
+        nbOfClicksLbl.GetComponentInChildren<TextMeshProUGUI>().text = label;
     }
 
     private void SetLevelName()

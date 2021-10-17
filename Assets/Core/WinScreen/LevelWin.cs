@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class LevelWin : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] StarIcon[] stars;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void DisplayStars(float errorRate) {
+        int nbStarsToDisplay = 0;
+
+        if (errorRate <= 1.8) {
+            nbStarsToDisplay = 3;
+        }
+        else if (errorRate <= 3.6) {
+            nbStarsToDisplay = 2;
+        }
+        else if (errorRate <= 5.4) {
+            nbStarsToDisplay = 1;
+        } else {
+            nbStarsToDisplay = 0;
+        }
+
+        Debug.Log($"{errorRate} taux d'echec, {nbStarsToDisplay} étoiles");
+
+        for (int i = 0; i < 3; i++) {
+            stars[i].SetStarState(nbStarsToDisplay >= (i + 1));
+        }
     }
 }

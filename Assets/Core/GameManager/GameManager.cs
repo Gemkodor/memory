@@ -52,17 +52,15 @@ public class GameManager : MonoBehaviour
     }
 
     public void DisplayWinScreen(int nbOfClicks) {
-        winPanel.SetActive(true);
-        CalculateReward(nbOfClicks);
-    }
-
-    private void CalculateReward(int nbOfClicks)
-    {
         int nbMinOfClicks = _currentLvl * 4;
         int nbOfErrors = nbOfClicks - nbMinOfClicks;
         int reward = 100 - (nbOfErrors * 10);
-
+        float errorRate = Mathf.Clamp((float) nbOfClicks /  (float) nbMinOfClicks, 1, 10);
+        
+        LevelWin levelWin = winPanel.GetComponent<LevelWin>();
+        levelWin.DisplayStars(errorRate);
         _money += reward;
+        winPanel.SetActive(true);
     }
 
     public void PlayCollection(string collection)

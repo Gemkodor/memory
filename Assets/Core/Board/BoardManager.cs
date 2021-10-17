@@ -10,35 +10,42 @@ public class BoardManager : MonoBehaviour
     [SerializeField] GameObject title;
     [SerializeField] GameObject nbOfClicksLbl;
 
-    private List<Sprite> cardsToDisplay = new List<Sprite>();
-
-    public int NbOfPairs { get { return cardsToDisplay.Count / 2; } }
+    private List<Sprite> cardsOfCurrentLevel = new List<Sprite>();
+    private List<Card> cardsCurrentlyDisplayed = new List<Card>();
+    private int nbOfPairsFound = 0;
+    private int nbOfClicks = 0;
 
     private void Start()
     {
-        SetLevelName(); 
+        SetLevelName();
         int nbOfImagesToUse = Mathf.Clamp(GameManager.Instance.CurrentLvl * 2, 2, 15);
         StartGame(nbOfImagesToUse);
     }
 
-    private void Update() {
-        nbOfClicksLbl.GetComponentInChildren<TextMeshProUGUI>().text = GameManager.Instance.NbOfClicks.ToString();
+    private void Update()
+    {
+        nbOfClicksLbl.GetComponentInChildren<TextMeshProUGUI>().text = "Nombre de clics : " + nbOfClicks.ToString();
     }
 
-    private void SetLevelName() {
-        if (title) {
+    private void SetLevelName()
+    {
+        if (title)
+        {
             TextMeshProUGUI titleLabel = title.GetComponent<TextMeshProUGUI>();
-            if (titleLabel) {
+            if (titleLabel)
+            {
                 titleLabel.text = "Niveau " + GameManager.Instance.CurrentLvl;
             }
         }
     }
 
-    public void StartGame(int nbOfImages) {
-        cardsToDisplay.Clear();
-        foreach (Transform child in transform) {
+    public void StartGame(int nbOfImages)
+    {
+        cardsOfCurrentLevel.Clear();
+        foreach (Transform child in transform)
+        {
             Destroy(child.gameObject);
-        }   
+        }
         GenerateGrid(nbOfImages);
     }
 
@@ -47,14 +54,15 @@ public class BoardManager : MonoBehaviour
         string collectionToLoad = GameManager.Instance.CurrentCollection;
         Sprite[] images = Resources.LoadAll<Sprite>("Images/" + collectionToLoad);
 
-        for (int i = 0; i < nbOfImages; i++) {
-            cardsToDisplay.Add(images[i]);
-            cardsToDisplay.Add(images[i]);
+        for (int i = 0; i < nbOfImages; i++)
+        {
+            cardsOfCurrentLevel.Add(images[i]);
+            cardsOfCurrentLevel.Add(images[i]);
         }
 
-        Shuffle(cardsToDisplay);
+        Shuffle(cardsOfCurrentLevel);
 
-        foreach (Sprite sprite in cardsToDisplay)
+        foreach (Sprite sprite in cardsOfCurrentLevel)
         {
             GameObject card = Instantiate(cardPrefab, transform);
             card.GetComponent<Card>().SetSprite(sprite);
@@ -72,5 +80,63 @@ public class BoardManager : MonoBehaviour
             cardsToDisplay[i] = cardsToDisplay[r];
             cardsToDisplay[r] = tmp;
         }
+    }
+
+    public bool CanDisplayCard()
+    {
+        return cardsCurrentlyDisplayed.Count < 2;
+    }
+
+    public void AddCardDisplayed(Card card)
+    {
+        cardsCurrentlyDisplayed.Add(card);
+        nbOfClicks++;
+
+        if (cardsCurrentlyDisplayed.Count == 2)
+        {
+            CheckIdenticalCards();
+        }
+    }
+
+    public void RemoveCardDisplayed(Card card)
+    {
+        cardsCurrentlyDisplayed.Remove(card);
+    }
+
+    public void CheckIdenticalCards()
+    {
+        if (cardsCurrentlyDisplayed[0].GetName() == cardsCurrentlyDisplayed[1].GetName())
+        {
+            Invoke("DeleteCardsFromBoard", 0.5f);
+            nbOfPairsFound++;
+            if (nbOfPairsFound >= (cardsOfCurrentLevel.Count / 2))
+            {
+                GameManager.Instance.DisplayWinScreen(nbOfClicks);
+            }
+        }
+        else
+        {
+            Invoke("ResetCards", 1f);
+        }
+    }
+
+    private void DeleteCardsFromBoard()
+    {
+        foreach (Card card in cardsCurrentlyDisplayed)
+        {
+            card.Deactivate();
+        }
+
+        cardsCurrentlyDisplayed.Clear();
+    }
+
+    private void ResetCards()
+    {
+        foreach (Card card in cardsCurrentlyDisplayed)
+        {
+            card.ToggleDisplay(false);
+        }
+
+        cardsCurrentlyDisplayed.Clear();
     }
 }

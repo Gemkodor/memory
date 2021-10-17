@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 public class Card : MonoBehaviour
@@ -8,6 +9,13 @@ public class Card : MonoBehaviour
     [SerializeField] private string cardName = "";
     [SerializeField] GameObject hiddenFace;
     [SerializeField] GameObject visibleFace;
+
+    private BoardManager board;
+
+    private void Start() {
+        board = FindObjectOfType<BoardManager>();
+        Assert.IsNotNull(board);
+    }
 
     public void SetSprite(Sprite sprite) {
         visibleFace.GetComponent<Image>().sprite = sprite;
@@ -21,9 +29,9 @@ public class Card : MonoBehaviour
 
     public void SeeCard()
     {
-        if (GameManager.Instance.CanDisplayCard())
+        if (board.CanDisplayCard())
         {
-            GameManager.Instance.AddCardDisplayed(this);
+            board.AddCardDisplayed(this);
             ToggleDisplay(true);
         }
     }

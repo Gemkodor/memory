@@ -980,7 +980,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4762989187834414547, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
       propertyPath: nbOfLevels
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4762989187834414547, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
       propertyPath: collections.Array.size

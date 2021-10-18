@@ -9,6 +9,8 @@ public class Card : MonoBehaviour
     [SerializeField] private string cardName = "";
     [SerializeField] GameObject hiddenFace;
     [SerializeField] GameObject visibleFace;
+    
+    private bool isDisplayed = false;
 
     private BoardManager board;
 
@@ -29,7 +31,7 @@ public class Card : MonoBehaviour
 
     public void SeeCard()
     {
-        if (board.CanDisplayCard())
+        if (!isDisplayed && board.CanDisplayCard())
         {
             board.AddCardDisplayed(this);
             ToggleDisplay(true);
@@ -40,6 +42,7 @@ public class Card : MonoBehaviour
     {
         visibleFace.GetComponent<Image>().enabled = display;
         hiddenFace.GetComponent<Image>().enabled = !display;
+        isDisplayed = display;
     }
 
     public void Deactivate()

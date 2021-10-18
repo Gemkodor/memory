@@ -8,7 +8,6 @@ public class BoardManager : MonoBehaviour
 {
     [SerializeField] GameObject cardPrefab;
     [SerializeField] GameObject title;
-    [SerializeField] GameObject nbOfClicksLbl;
 
     private List<Sprite> cardsOfCurrentLevel = new List<Sprite>();
     private List<Card> cardsCurrentlyDisplayed = new List<Card>();
@@ -20,14 +19,6 @@ public class BoardManager : MonoBehaviour
         SetLevelName();
         int nbOfImagesToUse = Mathf.Clamp(GameManager.Instance.CurrentLvl * 2, 2, 15);
         StartGame(nbOfImagesToUse);
-    }
-
-    private void Update()
-    {
-        string label = "Nombre de clics : " + nbOfClicks.ToString();
-        label += "\nNombre de clics minimum pour terminer : " + GameManager.Instance.CurrentLvl * 4;
-
-        nbOfClicksLbl.GetComponentInChildren<TextMeshProUGUI>().text = label;
     }
 
     private void SetLevelName()

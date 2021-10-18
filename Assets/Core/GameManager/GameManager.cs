@@ -2,12 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject winPanel;
+    [SerializeField] private int maxRewardPerLevel = 500;
+    [SerializeField] private int rewardPenaltyPerMistake = 5;
     [SerializeField] private int nbOfLevelsPerCollection = 1;
     [SerializeField] private List<string> collections = new List<string>();
+    [SerializeField] private TextMeshProUGUI playerMoneyLbl;
+    [SerializeField] private TextMeshProUGUI rewardLbl;
+    [SerializeField] private TextMeshProUGUI summaryLbl;
 
     private Dictionary<string, bool> _ownedCollections = new Dictionary<string, bool>();
     private string _currentCollection = "";
@@ -39,6 +45,10 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    private void Update() {
+        playerMoneyLbl.text = _money.ToString();
+    }
+
     public void BuyCollection(string name, int price)
     {
         _ownedCollections[name] = true;
@@ -54,13 +64,22 @@ public class GameManager : MonoBehaviour
     public void DisplayWinScreen(int nbOfClicks) {
         int nbMinOfClicks = _currentLvl * 4;
         int nbOfErrors = nbOfClicks - nbMinOfClicks;
-        int reward = 100 - (nbOfErrors * 10);
         float errorRate = Mathf.Clamp((float) nbOfClicks /  (float) nbMinOfClicks, 1, 10);
-        
+
         LevelWin levelWin = winPanel.GetComponent<LevelWin>();
         levelWin.DisplayStars(errorRate);
+
+        string label = "Nombre de clics : " + nbOfClicks.ToString();
+        label += "\n(Nombre de clics minimum : " + GameManager.Instance.CurrentLvl * 4 + ")";
+        summaryLbl.text = label;
+
+        int reward = Mathf.Clamp(maxRewardPerLevel - (nbOfErrors * rewardPenaltyPerMistake), 0, 1000);
         _money += reward;
+        rewardLbl.text = "Gain : " + reward + " $";
+
         winPanel.SetActive(true);
+
+        Saving.Instance.Save();
     }
 
     public void PlayCollection(string collection)
@@ -79,6 +98,11 @@ public class GameManager : MonoBehaviour
     {
         _currentLvl++;
         LoadNextScene();
+    }
+
+    public void MainMenu() {
+        winPanel.SetActive(false);
+        SceneManager.LoadScene("Menu");
     }
 
     private void LoadNextScene()

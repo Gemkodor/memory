@@ -8,17 +8,52 @@ public class BoardManager : MonoBehaviour
 {
     [SerializeField] GameObject cardPrefab;
     [SerializeField] GameObject title;
+    [SerializeField] TextMeshProUGUI timer;
 
     private List<Sprite> cardsOfCurrentLevel = new List<Sprite>();
     private List<Card> cardsCurrentlyDisplayed = new List<Card>();
     private int nbOfPairsFound = 0;
     private int nbOfClicks = 0;
+    private float timeElapsed = 0;
+    private bool isPlaying = false;
 
     private void Start()
     {
         SetLevelName();
         int nbOfImagesToUse = Mathf.Clamp(GameManager.Instance.CurrentLvl * 2, 2, 15);
         StartGame(nbOfImagesToUse);
+    }
+
+    private void Update() {
+        if (isPlaying) {
+            UpdateTimer();
+        }
+    }
+
+    private void UpdateTimer()
+    {
+        timeElapsed += Time.deltaTime;
+        int n = (int) timeElapsed;
+
+        n = n % (24 * 3600);
+        int hour = n / 3600;
+
+        n %= 3600;
+        int minutes = n / 60 ;
+
+        n %= 60;
+        int seconds = n;
+
+        string label = "Temps : ";
+        if (hour > 0) {
+            label += (hour <= 9 ? "0" + hour : hour.ToString()) + ":" +  (minutes <= 9 ? "0" + minutes : minutes.ToString()) + ":" + (seconds <= 9 ? "0" + seconds : seconds.ToString());
+        } else if (minutes > 0) {
+            label += (minutes <= 9 ? "0" + minutes : minutes.ToString()) + ":" + (seconds <= 9 ? "0" + seconds : seconds.ToString());
+        } else {
+            label += (seconds <= 9 ? "0" + seconds : seconds.ToString());
+        }
+
+        timer.text = label;
     }
 
     private void SetLevelName()
@@ -35,6 +70,8 @@ public class BoardManager : MonoBehaviour
 
     public void StartGame(int nbOfImages)
     {
+        timeElapsed = 0;
+        isPlaying = true;
         cardsOfCurrentLevel.Clear();
         foreach (Transform child in transform)
         {
@@ -109,6 +146,7 @@ public class BoardManager : MonoBehaviour
             nbOfPairsFound++;
             if (nbOfPairsFound >= (cardsOfCurrentLevel.Count / 2))
             {
+                isPlaying = false;
                 GameManager.Instance.DisplayWinScreen(nbOfClicks);
             }
         }

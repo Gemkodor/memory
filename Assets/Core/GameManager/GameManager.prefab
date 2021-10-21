@@ -318,13 +318,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   winPanel: {fileID: 7350696805222480282}
-  maxRewardPerLevel: 1000
-  rewardPenaltyPerMistake: 10
+  maxRewardPerLevel: 100
+  rewardPenaltyPerMistake: 1
   nbOfLevelsPerCollection: 9
   collections:
   - monuments
   - animals
+  - actors
   - flowers
+  - actresses
   playerMoneyLbl: {fileID: 186471497}
   rewardLbl: {fileID: 1843746502903760833}
   summaryLbl: {fileID: 1785779213237126545}

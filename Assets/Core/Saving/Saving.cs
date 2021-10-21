@@ -40,8 +40,8 @@ public class Saving : MonoBehaviour
             int owned = PlayerPrefs.GetInt(collection, -1);
             bool isOwned = (owned == 1 ? true : false);
             
-            if (owned != -1) {
-                GameManager.Instance.UpdateOwnedCollections(collection, isOwned);
+            if (isOwned) {
+                GameManager.Instance.UpdateOwnedCollections(collection, true);
             }
         }
     }

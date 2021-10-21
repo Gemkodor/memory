@@ -48,18 +48,22 @@ public class BoardManager : MonoBehaviour
         string collectionToLoad = GameManager.Instance.CurrentCollection;
         Sprite[] images = Resources.LoadAll<Sprite>("Images/" + collectionToLoad);
 
-        for (int i = 0; i < nbOfImages; i++)
-        {
-            cardsOfCurrentLevel.Add(images[i]);
-            cardsOfCurrentLevel.Add(images[i]);
-        }
+        if (images.Length >= nbOfImages) {
+            for (int i = 0; i < nbOfImages; i++)
+            {
+                cardsOfCurrentLevel.Add(images[i]);
+                cardsOfCurrentLevel.Add(images[i]);
+            }
 
-        Shuffle(cardsOfCurrentLevel);
+            Shuffle(cardsOfCurrentLevel);
 
-        foreach (Sprite sprite in cardsOfCurrentLevel)
-        {
-            GameObject card = Instantiate(cardPrefab, transform);
-            card.GetComponent<Card>().SetSprite(sprite);
+            foreach (Sprite sprite in cardsOfCurrentLevel)
+            {
+                GameObject card = Instantiate(cardPrefab, transform);
+                card.GetComponent<Card>().SetSprite(sprite);
+            }
+        } else {
+            Debug.Log("Not enough images");
         }
     }
 

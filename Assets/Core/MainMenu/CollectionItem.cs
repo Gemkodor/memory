@@ -47,7 +47,7 @@ public class CollectionItem : MonoBehaviour
         }
         else
         {
-            unlockBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Acheter\n(" + price + " €)";
+            unlockBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Acheter\n(" + price + " $)";
         }
     }
 }

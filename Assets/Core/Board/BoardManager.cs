@@ -142,17 +142,21 @@ public class BoardManager : MonoBehaviour
     {
         if (cardsCurrentlyDisplayed[0].GetName() == cardsCurrentlyDisplayed[1].GetName())
         {
-            Invoke("DeleteCardsFromBoard", 0.5f);
             nbOfPairsFound++;
-            if (nbOfPairsFound >= (cardsOfCurrentLevel.Count / 2))
-            {
-                isPlaying = false;
-                GameManager.Instance.DisplayWinScreen(nbOfClicks);
-            }
+            Invoke("DeleteCardsFromBoard", 0.5f);
+            Invoke("CheckEndGame", 0.5f);
         }
         else
         {
             Invoke("ResetCards", 1f);
+        }
+    }
+
+    private void CheckEndGame() {
+        if (nbOfPairsFound >= (cardsOfCurrentLevel.Count / 2))
+        {
+            isPlaying = false;
+            GameManager.Instance.DisplayWinScreen(nbOfClicks);
         }
     }
 

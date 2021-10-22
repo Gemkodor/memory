@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collectionName: 
+  price: 0
   unlockBtn: {fileID: 1989452458356409762}
   playBtn: {fileID: 1989452458126072237}
   background: {fileID: 1989452457955578262}

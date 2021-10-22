@@ -7,15 +7,27 @@ using TMPro;
 public class CollectionItem : MonoBehaviour
 {
     [SerializeField] string collectionName;
+    [SerializeField] string labelToDisplay;
     [SerializeField] int price;
+    [SerializeField] TextMeshProUGUI collectionLabel;
     [SerializeField] GameObject unlockBtn;
     [SerializeField] GameObject playBtn;
-    [SerializeField] GameObject background;
+    [SerializeField] GameObject lockedStateBackground;
+    [SerializeField] GameObject unlockedStateBackground;
 
     void Start()
     {
         bool levelUnlocked = GameManager.Instance.OwnedCollections.ContainsKey(collectionName) && GameManager.Instance.OwnedCollections[collectionName];
+        collectionLabel.text = labelToDisplay;
         SetState(levelUnlocked);
+    }
+
+    private void Update() {
+        if (unlockBtn.activeInHierarchy && GameManager.Instance.Money >= price) {
+            unlockBtn.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/btn_background_green");
+        } else {
+            unlockBtn.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/btn_background_red");
+        }
     }
 
     public void Play()
@@ -41,12 +53,10 @@ public class CollectionItem : MonoBehaviour
         unlockBtn.SetActive(!unlocked);
         playBtn.SetActive(unlocked);
 
-        if (unlocked)
-        {
-            background.GetComponent<Image>().color = new Color(0.2177804f, 0.4811321f, 0.1974457f);
-        }
-        else
-        {
+        unlockedStateBackground.SetActive(unlocked);
+        lockedStateBackground.SetActive(!unlocked);
+
+        if (!unlocked) {
             unlockBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Acheter\n(" + price + " $)";
         }
     }

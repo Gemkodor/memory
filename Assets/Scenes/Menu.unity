@@ -1269,10 +1269,10 @@ RectTransform:
   m_Father: {fileID: 2116493076}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920, y: 864}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &742657953
 MonoBehaviour:
@@ -2408,49 +2408,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 186471496, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 186471496, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 186471496, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 186471496, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1417510174, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1417510174, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1417510174, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1417510174, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 697651853942873952, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
       propertyPath: m_Name
       value: GameManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 2744286618662377894, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
-      propertyPath: collections.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2744286618662377894, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
-      propertyPath: collections.Array.data[5]
-      value: flags
       objectReference: {fileID: 0}
     - target: {fileID: 4865753422100683308, guid: d741888f0ad2a0a48a4e05957539044d, type: 3}
       propertyPath: m_RootOrder

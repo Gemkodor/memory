@@ -7,7 +7,6 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject winPanel;
-    [SerializeField] private int maxRewardPerLevel = 500;
     [SerializeField] private int rewardPenaltyPerMistake = 5;
     [SerializeField] private int nbOfLevelsPerCollection = 1;
     [SerializeField] private List<string> collections = new List<string>();
@@ -61,24 +60,30 @@ public class GameManager : MonoBehaviour
         _ownedCollections[name] = owned;
     }
 
-    public void DisplayWinScreen(int nbOfClicks) {
+    private float CalculateErrorRateAndReward(int nbOfClicks) {
         int nbMinOfClicks = _currentLvl * 4;
         int nbOfErrors = nbOfClicks - nbMinOfClicks;
         float errorRate = Mathf.Clamp((float) nbOfClicks /  (float) nbMinOfClicks, 1, 10);
+
+        int levelReward = _currentLvl * 10;
+        int reward = Mathf.Clamp(levelReward - (nbOfErrors * rewardPenaltyPerMistake), 0, levelReward);
+        _money += reward;
+        rewardLbl.text = "Gain : " + reward + " $";
+
+        return errorRate;
+    }
+
+    public void DisplayWinScreen(int nbOfClicks) {
+        float errorRate = CalculateErrorRateAndReward(nbOfClicks);
 
         LevelWin levelWin = winPanel.GetComponent<LevelWin>();
         levelWin.DisplayStars(errorRate);
 
         string label = "Nombre de clics : " + nbOfClicks.ToString();
-        label += "\n(Nombre de clics minimum : " + GameManager.Instance.CurrentLvl * 4 + ")";
+        label += "\n(Nombre de clics minimum : " + _currentLvl * 4 + ")";
         summaryLbl.text = label;
 
-        int reward = Mathf.Clamp(maxRewardPerLevel - (nbOfErrors * rewardPenaltyPerMistake), 0, 1000);
-        _money += reward;
-        rewardLbl.text = "Gain : " + reward + " $";
-
         winPanel.SetActive(true);
-
         Saving.Instance.Save();
     }
 

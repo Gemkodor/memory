@@ -59,12 +59,21 @@ public class BoardManager : MonoBehaviour
     {
         string collectionToLoad = GameManager.Instance.CurrentCollection;
         Sprite[] images = Resources.LoadAll<Sprite>("Images/" + collectionToLoad);
+        List<int> imagesIndexToUse = new List<int>();
 
         if (images.Length >= nbOfImages) {
-            for (int i = 0; i < nbOfImages; i++)
-            {
-                cardsOfCurrentLevel.Add(images[i]);
-                cardsOfCurrentLevel.Add(images[i]);
+            while (imagesIndexToUse.Count < nbOfImages) {
+                int index = 0;
+                do {
+                    index = Random.Range(0, images.Length);
+                } while(imagesIndexToUse.Contains(index));
+
+                imagesIndexToUse.Add(index);
+            }
+
+            foreach(int index in imagesIndexToUse) {
+                cardsOfCurrentLevel.Add(images[index]);
+                cardsOfCurrentLevel.Add(images[index]);
             }
 
             Shuffle(cardsOfCurrentLevel);

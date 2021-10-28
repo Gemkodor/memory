@@ -73,14 +73,13 @@ public class GameManager : MonoBehaviour
         return errorRate;
     }
 
-    public void DisplayWinScreen(int nbOfClicks) {
+    public void DisplayWinScreen(int nbOfClicks, float timePlayed) {
         float errorRate = CalculateErrorRateAndReward(nbOfClicks);
 
         LevelWin levelWin = winPanel.GetComponent<LevelWin>();
         levelWin.DisplayStars(errorRate);
 
-        string label = "Nombre de clics : " + nbOfClicks.ToString();
-        label += "\n(Nombre de clics minimum : " + _currentLvl * 4 + ")";
+        string label = $"{ConvertSecondsToTimerLabel(timePlayed)}\nNombre de clics : {nbOfClicks}\nNombre de clics minimum : {_currentLvl * 4}";
         summaryLbl.text = label;
 
         winPanel.SetActive(true);
@@ -122,5 +121,30 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("Game");
         }
+    }
+
+    public string ConvertSecondsToTimerLabel(float timeElapsed)
+    {
+        int n = (int) timeElapsed;
+
+        n = n % (24 * 3600);
+        int hour = n / 3600;
+
+        n %= 3600;
+        int minutes = n / 60 ;
+
+        n %= 60;
+        int seconds = n;
+
+        string label = "Temps : ";
+        if (hour > 0) {
+            label += (hour <= 9 ? "0" + hour : hour.ToString()) + ":" +  (minutes <= 9 ? "0" + minutes : minutes.ToString()) + ":" + (seconds <= 9 ? "0" + seconds : seconds.ToString());
+        } else if (minutes > 0) {
+            label += (minutes <= 9 ? "0" + minutes : minutes.ToString()) + ":" + (seconds <= 9 ? "0" + seconds : seconds.ToString());
+        } else {
+            label += (seconds <= 9 ? "0" + seconds : seconds.ToString());
+        }
+
+        return label;
     }
 }

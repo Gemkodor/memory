@@ -26,34 +26,9 @@ public class BoardManager : MonoBehaviour
 
     private void Update() {
         if (isPlaying) {
-            UpdateTimer();
+            timeElapsed += Time.deltaTime;
+            timer.text = GameManager.Instance.ConvertSecondsToTimerLabel(timeElapsed);
         }
-    }
-
-    private void UpdateTimer()
-    {
-        timeElapsed += Time.deltaTime;
-        int n = (int) timeElapsed;
-
-        n = n % (24 * 3600);
-        int hour = n / 3600;
-
-        n %= 3600;
-        int minutes = n / 60 ;
-
-        n %= 60;
-        int seconds = n;
-
-        string label = "Temps : ";
-        if (hour > 0) {
-            label += (hour <= 9 ? "0" + hour : hour.ToString()) + ":" +  (minutes <= 9 ? "0" + minutes : minutes.ToString()) + ":" + (seconds <= 9 ? "0" + seconds : seconds.ToString());
-        } else if (minutes > 0) {
-            label += (minutes <= 9 ? "0" + minutes : minutes.ToString()) + ":" + (seconds <= 9 ? "0" + seconds : seconds.ToString());
-        } else {
-            label += (seconds <= 9 ? "0" + seconds : seconds.ToString());
-        }
-
-        timer.text = label;
     }
 
     private void SetLevelName()
@@ -156,7 +131,7 @@ public class BoardManager : MonoBehaviour
         if (nbOfPairsFound >= (cardsOfCurrentLevel.Count / 2))
         {
             isPlaying = false;
-            GameManager.Instance.DisplayWinScreen(nbOfClicks);
+            GameManager.Instance.DisplayWinScreen(nbOfClicks, timeElapsed);
         }
     }
 
